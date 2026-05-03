@@ -4,12 +4,13 @@
 #include <GLFW/glfw3.h>
 #include <string>
 
-class WindowManager {
+class Window {
 public:
-  WindowManager(int width, int height, const std::string &title);
+  Window(int width, int height, const std::string &title);
 
   void initWindow();
   void pollEvents();
+  void swapBuffers();
 
   bool shouldClose();
 

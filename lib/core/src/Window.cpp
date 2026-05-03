@@ -1,10 +1,11 @@
 #include "Window.h"
+#include "GLFW/glfw3.h"
 #include <stdexcept>
 
-WindowManager::WindowManager(int width, int height, const std::string &title)
+Window::Window(int width, int height, const std::string &title)
     : width(width), height(height), title(title) {}
 
-void WindowManager::initWindow() {
+void Window::initWindow() {
   if (!glfwInit()) {
     throw std::runtime_error("Failed to init GLFW");
   }
@@ -25,13 +26,8 @@ void WindowManager::initWindow() {
   gladLoadGL(glfwGetProcAddress);
 }
 
-void WindowManager::pollEvents() {
-  glfwPollEvents();
-  glClearColor(0.2f, 0.3f, 0.3f, 1.0f);
-  glClear(GL_COLOR_BUFFER_BIT);
+void Window::pollEvents() { glfwPollEvents(); }
 
-  // Swap the screen buffers
-  glfwSwapBuffers(window);
-}
+void Window::swapBuffers() { glfwSwapBuffers(window); }
 
-bool WindowManager::shouldClose() { return glfwWindowShouldClose(window); }
+bool Window::shouldClose() { return glfwWindowShouldClose(window); }
