@@ -35,14 +35,14 @@ jobs:
       run: |
         sudo apt update
         sudo apt install -y python3 python3-pip xorg-dev libwayland-dev
-        pip3 install jinja2
+
+    - name: Install dependencies (all)
+      run: pip3 install jinja2
 
     # ---------------- CONFIGURE ----------------
     - name: Configure CMake
       run: |
-        cmake -B build \
-          -DCMAKE_BUILD_TYPE=${{ matrix.build_type }} \
-          -S .
+        cmake -B build -DCMAKE_BUILD_TYPE=${{ matrix.build_type }} -DUSE_WAYLAND=ON -DUSE_X11=OFF -S .
 
     # ---------------- BUILD ----------------
     - name: Build
