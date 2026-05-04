@@ -13,6 +13,7 @@ public:
     glm::vec3 colors;
   } Vertex;
 
+  OpenGLRenderer(Window &window) : Renderer(window) {}
   void init() override;
   void render() override;
 

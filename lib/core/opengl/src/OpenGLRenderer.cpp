@@ -1,7 +1,14 @@
 #include "OpenGLRenderer.h"
-#include "glad/gl.h"
 
 void OpenGLRenderer::init() {
+  // -- Configure window
+  glfwWindowHint(GLFW_CONTEXT_VERSION_MAJOR, 3);
+  glfwWindowHint(GLFW_CONTEXT_VERSION_MINOR, 3);
+  glfwWindowHint(GLFW_OPENGL_PROFILE, GLFW_OPENGL_CORE_PROFILE);
+  if (!gladLoadGL(glfwGetProcAddress)) {
+    glfwTerminate();
+    throw std::runtime_error("Failed to initialize glad");
+  }
   // -- Prepare shaders
   prepareVertexShader();
   prepareFragmentShader();
