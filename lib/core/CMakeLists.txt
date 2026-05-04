@@ -8,7 +8,6 @@ option(USE_X11 "Use X11 backend" ON)
 target_sources(core PRIVATE
   src/Window.cpp
   opengl/src/OpenGLRenderer.cpp
-  webgpu/src/utils_metal.mm
   webgpu/src/WebGPURenderer.cpp
 )
 
@@ -20,6 +19,7 @@ target_include_directories(core PUBLIC
 
 if (APPLE)
   target_compile_definitions(core PRIVATE PLATFORM_MACOS DAWN_ENABLE_BACKEND_METAL)
+  target_sources(core PRIVATE webgpu/src/utils_metal.mm)
   target_link_libraries(core PRIVATE
     "-framework IOSurface"
     "-framework CoreVideo"
