@@ -27,14 +27,12 @@ void WebGPURenderer::initSurface() {
 
 #elif defined(PLATFORM_WAYLAND)
   wgpu::SurfaceSourceWaylandSurface wl{};
-  wl.chain.sType = wgpu::SType::SurfaceSourceWaylandSurface;
   wl.display = glfwGetWaylandDisplay();
   wl.surface = glfwGetWaylandWindow(window.getNativeWindow());
   desc.nextInChain = &wl;
 
 #elif defined(PLATFORM_X11)
   wgpu::SurfaceSourceXlibWindow x11{};
-  x11.chain.sType = wgpu::SType::SurfaceSourceXlibWindow;
   x11.display = glfwGetX11Display();
   x11.window = glfwGetX11Window(window.getNativeWindow());
   desc.nextInChain = &x11;
