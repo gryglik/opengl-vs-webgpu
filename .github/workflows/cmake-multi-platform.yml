@@ -37,15 +37,12 @@ jobs:
         sudo apt install -y python3 python3-pip xorg-dev libwayland-dev libxkbcommon-dev wayland-protocols
 
     - name: Install dependencies (all)
-      run: |
-        python3 --version
-        python3 -m pip install --upgrade pip --break-system-packages
-        python3 -m pip install jinja2 --break-system-packages
+      run: pip3 install jinja2 --break-system-packages
 
     # ---------------- CONFIGURE ----------------
     - name: Configure CMake
       run: |
-        cmake -B build -DCMAKE_BUILD_TYPE=${{ matrix.build_type }} -DUSE_WAYLAND=ON -DUSE_X11=OFF -S .
+        cmake -B build -DPython3_EXECUTABLE=python3 -DCMAKE_BUILD_TYPE=${{ matrix.build_type }} -DUSE_WAYLAND=ON -DUSE_X11=OFF -S .
 
     # ---------------- BUILD ----------------
     - name: Build
