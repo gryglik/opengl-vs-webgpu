@@ -33,10 +33,6 @@ jobs:
         python-version: '3.14'
     - uses: microsoft/setup-msbuild@v3
       if: runner.os == 'Windows'
-    - uses: ilammy/msvc-dev-cmd@v1
-      if: runner.os == 'Windows'
-      with:
-        arch: x64
 
     # ---------------- DEPENDENCIES ----------------
     - name: Install dependencies (Ubuntu only)
