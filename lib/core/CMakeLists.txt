@@ -35,7 +35,6 @@ elseif(WIN32)
     d3d12
     dxgi
     d3dcompiler
-    d3dcommon
     dxguid
     kernel32
   )
