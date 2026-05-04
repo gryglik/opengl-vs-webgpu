@@ -30,6 +30,7 @@ private:
   wgpu::TextureFormat format;
   wgpu::RenderPipeline pipeline;
 
+  void initSurface();
   void prepareDevice();
   void prepareSurface();
   void prepareShaders();

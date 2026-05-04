@@ -26,5 +26,6 @@ private:
 
   void prepareVertexShader();
   void prepareFragmentShader();
+  void compileShaders();
   void prepareBuffers();
 };

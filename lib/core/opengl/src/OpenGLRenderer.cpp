@@ -1,24 +1,12 @@
 #include "OpenGLRenderer.h"
 
 void OpenGLRenderer::init() {
-  // -- Configure window
-  glfwWindowHint(GLFW_CONTEXT_VERSION_MAJOR, 3);
-  glfwWindowHint(GLFW_CONTEXT_VERSION_MINOR, 3);
-  glfwWindowHint(GLFW_OPENGL_PROFILE, GLFW_OPENGL_CORE_PROFILE);
-  if (!gladLoadGL(glfwGetProcAddress)) {
-    glfwTerminate();
-    throw std::runtime_error("Failed to initialize glad");
-  }
   // -- Prepare shaders
   prepareVertexShader();
   prepareFragmentShader();
 
-  // -- Linking shaders
-  program = glCreateProgram();
-
-  glAttachShader(program, vertexShader);
-  glAttachShader(program, fragmentShader);
-  glLinkProgram(program);
+  // -- Compiling shaders
+  compileShaders();
 
   // -- Prepare buffers
   prepareBuffers();
@@ -57,6 +45,14 @@ void OpenGLRenderer::prepareFragmentShader() {
   fragmentShader = glCreateShader(GL_FRAGMENT_SHADER);
   glShaderSource(fragmentShader, 1, &fragmentShaderSource, NULL);
   glCompileShader(fragmentShader);
+}
+
+void OpenGLRenderer::compileShaders() {
+  program = glCreateProgram();
+
+  glAttachShader(program, vertexShader);
+  glAttachShader(program, fragmentShader);
+  glLinkProgram(program);
 }
 
 void OpenGLRenderer::prepareBuffers() {

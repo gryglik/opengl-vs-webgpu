@@ -1,5 +1,48 @@
 #include "WebGPURenderer.h"
 
+void WebGPURenderer::init() {
+  initSurface();
+  prepareDevice();
+  prepareSurface();
+  prepareShaders();
+}
+
+#if defined(PLATFORM_MACOS)
+std::unique_ptr<wgpu::ChainedStruct, void (*)(wgpu::ChainedStruct *)>
+SetupWindowAndGetSurfaceDescriptorCocoa(GLFWwindow *window);
+#endif
+
+void WebGPURenderer::initSurface() {
+  wgpu::SurfaceDescriptor desc{};
+
+#if defined(PLATFORM_WINDOWS)
+  wgpu::SurfaceSourceWindowsHWND win{};
+  win.hwnd = glfwGetWin32Window(window);
+  win.hinstance = GetModuleHandle(nullptr);
+  desc.nextInChain = &win;
+
+#elif defined(PLATFORM_MACOS)
+  macChain = SetupWindowAndGetSurfaceDescriptorCocoa(window.getNativeWindow());
+  desc.nextInChain = macChain.get();
+
+#elif defined(USE_WAYLAND)
+  wgpu::SurfaceSourceWaylandSurface wl{};
+  wl.chain.sType = wgpu::SType::SurfaceSourceWaylandSurface;
+  wl.display = glfwGetWaylandDisplay();
+  wl.surface = glfwGetWaylandWindow(window);
+  desc.nextInChain = &wl;
+
+#elif defined(USE_X11)
+  wgpu::SurfaceSourceXlibWindow x11{};
+  x11.chain.sType = wgpu::SType::SurfaceSourceXlibWindow;
+  x11.display = glfwGetX11Display();
+  x11.window = glfwGetX11Window(window);
+  desc.nextInChain = &x11;
+#endif
+
+  surface = instance.CreateSurface(&desc);
+}
+
 void WebGPURenderer::prepareDevice() {
   // Access to gpu
   static const auto kTimedWaitAny = wgpu::InstanceFeatureName::TimedWaitAny;
@@ -77,48 +120,6 @@ void WebGPURenderer::prepareShaders() {
   wgpu::RenderPipelineDescriptor descriptor{.vertex = {.module = shaderModule},
                                             .fragment = &fragmentState};
   pipeline = device.CreateRenderPipeline(&descriptor);
-}
-
-#if defined(PLATFORM_MACOS)
-std::unique_ptr<wgpu::ChainedStruct, void (*)(wgpu::ChainedStruct *)>
-SetupWindowAndGetSurfaceDescriptorCocoa(GLFWwindow *window);
-#endif
-
-void WebGPURenderer::init() {
-  glfwWindowHint(GLFW_CLIENT_API, GLFW_NO_API);
-
-  wgpu::SurfaceDescriptor desc{};
-
-#if defined(PLATFORM_WINDOWS)
-  wgpu::SurfaceSourceWindowsHWND win{};
-  win.hwnd = glfwGetWin32Window(window);
-  win.hinstance = GetModuleHandle(nullptr);
-  desc.nextInChain = &win;
-
-#elif defined(PLATFORM_MACOS)
-  macChain = SetupWindowAndGetSurfaceDescriptorCocoa(window.getNativeWindow());
-  desc.nextInChain = macChain.get();
-
-#elif defined(USE_WAYLAND)
-  wgpu::SurfaceSourceWaylandSurface wl{};
-  wl.chain.sType = wgpu::SType::SurfaceSourceWaylandSurface;
-  wl.display = glfwGetWaylandDisplay();
-  wl.surface = glfwGetWaylandWindow(window);
-  desc.nextInChain = &wl;
-
-#elif defined(USE_X11)
-  wgpu::SurfaceSourceXlibWindow x11{};
-  x11.chain.sType = wgpu::SType::SurfaceSourceXlibWindow;
-  x11.display = glfwGetX11Display();
-  x11.window = glfwGetX11Window(window);
-  desc.nextInChain = &x11;
-#endif
-
-  surface = instance.CreateSurface(&desc);
-
-  prepareDevice();
-  prepareSurface();
-  prepareShaders();
 }
 
 void WebGPURenderer::render() {

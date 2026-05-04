@@ -29,18 +29,18 @@ if (APPLE)
   )
 
 elseif(WIN32)
-  target_compile_definitions(core PRIVATE PLATFORM_WINDOWS DAWN_EXPOSE_NATIVE_WIN32)
+  target_compile_definitions(core PRIVATE PLATFORM_WINDOWS GLFW_EXPOSE_NATIVE_WIN32 DAWN_EXPOSE_NATIVE_WIN32)
 
 elseif(UNIX)
   target_compile_definitions(core PRIVATE PLATFORM_UNIX)
 
   if(USE_WAYLAND)
-    target_compile_definitions(core PRIVATE PLATFORM_WAYLAND DAWN_EXPOSE_NATIVE_WAYLAND)
+    target_compile_definitions(core PRIVATE PLATFORM_WAYLAND GLFW_EXPOSE_NATIVE_WAYLAND DAWN_EXPOSE_NATIVE_WAYLAND)
 
     target_link_libraries(core PRIVATE wayland-client)
 
   elseif(USE_X11)
-    target_compile_definitions(core PRIVATE PLATFORM_X11 DAWN_EXPOSE_NATIVE_X11)
+    target_compile_definitions(core PRIVATE PLATFORM_X11 GLFW_EXPOSE_NATIVE_X11 DAWN_EXPOSE_NATIVE_X11)
 
     find_package(X11 REQUIRED)
     target_link_libraries(core PRIVATE X11)
