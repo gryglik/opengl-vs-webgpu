@@ -28,6 +28,9 @@ jobs:
 
     steps:
     - uses: actions/checkout@v4
+    - uses: actions/setup-python@v6
+      with:
+        python-version: '3.14'
 
     # ---------------- DEPENDENCIES ----------------
     - name: Install dependencies (Ubuntu only)
@@ -37,7 +40,9 @@ jobs:
         sudo apt install -y python3 python3-pip xorg-dev libwayland-dev libxkbcommon-dev wayland-protocols
 
     - name: Install dependencies (all)
-      run: pip3 install jinja2 --break-system-packages
+      run: |
+        python3 --version
+        pip3 install jinja2 --break-system-packages
 
     # ---------------- CONFIGURE ----------------
     - name: Configure CMake
