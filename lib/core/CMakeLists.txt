@@ -31,12 +31,7 @@ if (APPLE)
 elseif(WIN32)
   target_compile_definitions(core PRIVATE PLATFORM_WINDOWS GLFW_EXPOSE_NATIVE_WIN32 DAWN_EXPOSE_NATIVE_WIN32)
   target_link_libraries(core PRIVATE
-    d3d11
-    d3d12
-    dxgi
-    d3dcompiler
-    dxguid
-    kernel32
+    kernel32.lib
   )
 
 elseif(UNIX)
