@@ -29,18 +29,28 @@ if (APPLE)
   )
 
 elseif(WIN32)
-  target_compile_definitions(core PRIVATE PLATFORM_WINDOWS DAWN_EXPOSE_NATIVE_WIN32)
+  target_compile_definitions(core PRIVATE PLATFORM_WINDOWS GLFW_EXPOSE_NATIVE_WIN32 DAWN_EXPOSE_NATIVE_WIN32)
+  target_link_libraries(core PRIVATE
+    dxguid.lib
+    dxgi.lib
+    d3d11.lib
+    d3d12.lib
+    d3dcompiler.lib
+    mincore.lib
+    user32.lib
+    gdi32.lib
+  )
 
 elseif(UNIX)
   target_compile_definitions(core PRIVATE PLATFORM_UNIX)
 
   if(USE_WAYLAND)
-    target_compile_definitions(core PRIVATE PLATFORM_WAYLAND DAWN_EXPOSE_NATIVE_WAYLAND)
+    target_compile_definitions(core PRIVATE PLATFORM_WAYLAND GLFW_EXPOSE_NATIVE_WAYLAND DAWN_EXPOSE_NATIVE_WAYLAND)
 
     target_link_libraries(core PRIVATE wayland-client)
 
   elseif(USE_X11)
-    target_compile_definitions(core PRIVATE PLATFORM_X11 DAWN_EXPOSE_NATIVE_X11)
+    target_compile_definitions(core PRIVATE PLATFORM_X11 GLFW_EXPOSE_NATIVE_X11 DAWN_EXPOSE_NATIVE_X11)
 
     find_package(X11 REQUIRED)
     target_link_libraries(core PRIVATE X11)
@@ -86,10 +96,13 @@ glad_add_library(glad_core STATIC REPRODUCIBLE LOADER API gl:core=4.6)
 # -- webgpu-dawn (pre-built) -- #
 if (APPLE)
   set (DAWN_URL https://github.com/google/dawn/releases/download/v20260423.175430/Dawn-31e25af254ab572c77054edec4946d2244e184dd-macos-latest-Release.tar.gz)
+  set (DAWN_SUBDIR lib/libwebgpu_dawn.a)
 elseif (WIN32)
   set (DAWN_URL https://github.com/google/dawn/releases/download/v20260423.175430/Dawn-31e25af254ab572c77054edec4946d2244e184dd-windows-latest-Release.tar.gz)
+  set(DAWN_SUBDIR lib/webgpu_dawn.lib)
 elseif (UNIX)
   set (DAWN_URL https://github.com/google/dawn/releases/download/v20260423.175430/Dawn-31e25af254ab572c77054edec4946d2244e184dd-ubuntu-latest-Release.tar.gz)
+  set (DAWN_SUBDIR lib64/libwebgpu_dawn.a)
 else ()
   message(FATAL_ERROR "OS not supported.")
 endif()
@@ -103,7 +116,7 @@ FetchContent_MakeAvailable(dawn_prebuilt)
 set(DAWN_DIR ${dawn_prebuilt_SOURCE_DIR})
 add_library(dawn STATIC IMPORTED)
 set_target_properties(dawn PROPERTIES
-  IMPORTED_LOCATION ${DAWN_DIR}/lib/libwebgpu_dawn.a
+  IMPORTED_LOCATION ${DAWN_DIR}/${DAWN_SUBDIR}
   INTERFACE_INCLUDE_DIRECTORIES ${DAWN_DIR}/include
 )
 

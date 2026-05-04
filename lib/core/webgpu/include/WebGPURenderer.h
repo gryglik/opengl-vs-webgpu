@@ -13,6 +13,7 @@
 #include <iostream>
 
 #include <GLFW/glfw3.h>
+#include <GLFW/glfw3native.h>
 #include <webgpu/webgpu_cpp.h>
 
 class WebGPURenderer : public Renderer {
@@ -29,6 +30,7 @@ private:
   wgpu::TextureFormat format;
   wgpu::RenderPipeline pipeline;
 
+  void initSurface();
   void prepareDevice();
   void prepareSurface();
   void prepareShaders();

@@ -7,9 +7,12 @@
 
 class Window {
 public:
-  Window(unsigned int width, unsigned int height, const std::string &title);
+  enum class GraphicsAPI { OpenGL, WebGPU };
 
-  void initWindow();
+  Window(unsigned int width, unsigned int height, const std::string &title,
+         GraphicsAPI api);
+
+  void init();
   void pollEvents();
   void swapBuffers();
 
@@ -26,4 +29,5 @@ private:
   std::string title;
 
   GLFWwindow *window = nullptr;
+  GraphicsAPI api;
 };
