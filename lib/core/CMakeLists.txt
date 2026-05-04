@@ -32,7 +32,7 @@ elseif(WIN32)
   target_compile_definitions(core PRIVATE PLATFORM_WINDOWS GLFW_EXPOSE_NATIVE_WIN32 DAWN_EXPOSE_NATIVE_WIN32)
   target_link_libraries(core PRIVATE
     dxguid
-    kernel32
+    kernelbase.lib
   )
 
 elseif(UNIX)
