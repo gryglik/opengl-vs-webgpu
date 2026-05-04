@@ -91,7 +91,6 @@ void WebGPURenderer::init() {
 
 #if defined(PLATFORM_WINDOWS)
   wgpu::SurfaceSourceWindowsHWND win{};
-  win.chain.sType = wgpu::SType::SurfaceSourceWindowsHWND;
   win.hwnd = glfwGetWin32Window(window);
   win.hinstance = GetModuleHandle(nullptr);
   desc.nextInChain = &win;
