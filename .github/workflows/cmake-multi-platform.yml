@@ -39,7 +39,7 @@ jobs:
     - name: Install dependencies (all)
       run: |
         python3 --version
-        python3 -m pip install --upgrade pip
+        python3 -m pip install --upgrade pip --break-system-packages
         python3 -m pip install jinja2 --break-system-packages
 
     # ---------------- CONFIGURE ----------------
