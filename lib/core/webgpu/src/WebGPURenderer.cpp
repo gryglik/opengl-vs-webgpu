@@ -17,7 +17,7 @@ void WebGPURenderer::initSurface() {
 
 #if defined(PLATFORM_WINDOWS)
   wgpu::SurfaceSourceWindowsHWND win{};
-  win.hwnd = glfwGetWin32Window(window);
+  win.hwnd = glfwGetWin32Window(window.getNativeWindow());
   win.hinstance = GetModuleHandle(nullptr);
   desc.nextInChain = &win;
 
@@ -25,18 +25,18 @@ void WebGPURenderer::initSurface() {
   macChain = SetupWindowAndGetSurfaceDescriptorCocoa(window.getNativeWindow());
   desc.nextInChain = macChain.get();
 
-#elif defined(USE_WAYLAND)
+#elif defined(PLATFORM_WAYLAND)
   wgpu::SurfaceSourceWaylandSurface wl{};
   wl.chain.sType = wgpu::SType::SurfaceSourceWaylandSurface;
   wl.display = glfwGetWaylandDisplay();
-  wl.surface = glfwGetWaylandWindow(window);
+  wl.surface = glfwGetWaylandWindow(window.getNativeWindow());
   desc.nextInChain = &wl;
 
-#elif defined(USE_X11)
+#elif defined(PLATFORM_X11)
   wgpu::SurfaceSourceXlibWindow x11{};
   x11.chain.sType = wgpu::SType::SurfaceSourceXlibWindow;
   x11.display = glfwGetX11Display();
-  x11.window = glfwGetX11Window(window);
+  x11.window = glfwGetX11Window(window.getNativeWindow());
   desc.nextInChain = &x11;
 #endif
 
