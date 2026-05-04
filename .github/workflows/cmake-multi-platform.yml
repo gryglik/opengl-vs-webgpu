@@ -54,7 +54,8 @@ jobs:
     
     - name: Configure cmake (Windows)
       if: runner.os == 'Windows'
-      run: cmake -B build -DPython3_EXECUTABLE=python3 -DCMAKE_BUILD_TYPE=${{ matrix.build_type }} -S . -A x64
+      run: |
+        cmake -B build -DPython3_EXECUTABLE=python3 -DCMAKE_BUILD_TYPE=${{ matrix.build_type }} -S . -A x64
 
     # ---------------- BUILD ----------------
     - name: Build
