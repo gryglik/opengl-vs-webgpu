@@ -1,8 +1,12 @@
 all: build
 
-run: build
+run-opengl: build
 	@echo [!] Uruchamianie programu
-	./build/app
+	./build/app opengl
+
+run-webgpu: build
+	@echo [!] Uruchamianie programu
+	./build/app webgpu
 
 build-cmake:
 	@echo [!] Budowanie projektu CMAKE
